@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Model\Users;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+
+// Route::get('/users', function () {
+//     return view('users');
+// })->name('users');
+
+Route::group(['prefix' => 'users'], function () {
+    Route::get('/', [UsersController::class, 'index'])->name('users');    //route for listing users
+    Route::get('/create', [UsersController::class, 'create'])->name('users.create'); //route for showing create user form
+    Route::post('/store', [UsersController::class, 'store'])->name('users.store'); //route for storing new user
+
+    //update and delete routes can be added here 
+    Route::get('/{id}', [UsersController::class, 'edit'])->name('users.show'); //route for showing user details
+    Route::put('/{id}', [UsersController::class, 'update'])->name('users.update'); //route for updating user details
+    Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy'); //route for deleting user
+});

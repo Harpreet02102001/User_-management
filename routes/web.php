@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Model\Users;
@@ -23,4 +24,10 @@ Route::group(['prefix' => 'users'], function () {
     Route::get('/{id}', [UsersController::class, 'edit'])->name('users.show'); //route for showing user details
     Route::put('/{id}', [UsersController::class, 'update'])->name('users.update'); //route for updating user details
     Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy'); //route for deleting user
+});
+
+
+Route::group(['prefix' => 'login'], function () {
+    Route::get('/', [LoginController::class, 'index'])->name('login');    //route for login page
+    Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('login.authenticate'); //route for handling login form submission
 });

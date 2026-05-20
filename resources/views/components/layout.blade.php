@@ -13,6 +13,12 @@
     <link href="{{ asset('css/sidebar.css') }}" rel="stylesheet" />
 
     <style>
+        * {
+            margin: 0px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             overflow-x: hidden;
         }
@@ -102,7 +108,6 @@
 
             <ul class="list-unstyled ps-0">
 
-                <!-- Home -->
                 <li class="mb-2">
 
                     <button class="btn btn-toggle d-inline-flex align-items-center border-0"
@@ -142,7 +147,6 @@
                     </div>
                 </li>
 
-                <!-- Dashboard -->
                 <li class="mb-2">
 
                     <button class="btn btn-toggle d-inline-flex align-items-center border-0 collapsed"
@@ -182,7 +186,6 @@
                     </div>
                 </li>
 
-                <!-- Orders -->
                 <li class="mb-2">
 
                     <button class="btn btn-toggle d-inline-flex align-items-center border-0 collapsed"
@@ -224,7 +227,6 @@
 
                 <li class="border-top my-3"></li>
 
-                <!-- Account -->
                 <li class="mb-2">
 
                     <button class="btn btn-toggle d-inline-flex align-items-center border-0 collapsed"
@@ -238,17 +240,12 @@
 
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             <li>
-                                <a href="#"
+                                <a href="{{ route('users') }}"
                                     class="link-dark d-inline-flex text-decoration-none rounded w-100">
-                                    User List
+                                    User
                                 </a>
                             </li>
-                            <li>
-                                <a href="/users"
-                                    class="link-dark d-inline-flex text-decoration-none rounded w-100">
-                                    Users
-                                </a>
-                            </li>
+
 
                             <li>
                                 <a href="#"
@@ -273,7 +270,6 @@
 
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content p-4">
 
             {{ $slot }}
@@ -284,9 +280,9 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="{{ asset('js/sidebar.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @include('sweetalert::alert')
 </body>
 
 </html>

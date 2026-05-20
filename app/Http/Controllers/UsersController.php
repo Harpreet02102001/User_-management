@@ -7,21 +7,26 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\Users\CreateUserRequest;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::get();
+        $users = User::query();
         $roles = Role::get();
-        // dd($users->toArray(), $roles->toArray());
+
+        if ($request->has('keyword') && $request->input('keyword')) {
+            $users = $users->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
+        }
+        $users = $users->orderBy('name', 'asc')->simplePaginate(5);
         return view('users/users', compact('users', 'roles'));
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      */
     public function create()
@@ -30,7 +35,6 @@ class UsersController extends Controller
         // dd($roles->toArray());
         return view('users.includes.create_user', compact('roles'));
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -44,13 +48,16 @@ class UsersController extends Controller
                 'mobile' => $request->mobile,
                 'password' => bcrypt($request->password),
                 'department' => $request->department,
-                'role' => $request->role,
+                'role_id' => $request->role_id,
                 'is_active' => $request->has('is_active'),
             ]);
             DB::commit();
-            return redirect()->route('users')->with('success', 'User created successfully.');
+            // return redirect()->route('users')->with('success', 'User created successfully.');
+            Alert::toast('User created successfully.', 'success')->autoClose(1500);
+            return redirect()->route('users');
         } catch (\Exception $e) {
             DB::rollBack();
+            Alert::toast('An error occurred while creating the user.', 'error')->autoClose(1500);
             return redirect()->back()->with('error', 'An error occurred while creating the user: ' . $e->getMessage());
         }
         // dd($request->all());
@@ -92,13 +99,15 @@ class UsersController extends Controller
                 'mobile' => $request->mobile,
                 'password' => bcrypt($request->password),
                 'department' => $request->department,
-                'role' => $request->role,
+                'role_id' => $request->role_id,
                 'is_active' => $request->has('is_active'),
             ]);
             DB::commit();
-            return redirect()->route('users')->with('success', 'User updated successfully.');
+            Alert::toast('User updated successfully.', 'success')->autoClose(1500);
+            return redirect()->route('users');
         } catch (\Exception $e) {
             DB::rollBack();
+            Alert::toast('An error occurred while updating the user.', 'error')->autoClose(1500);
             return redirect()->back()->with('error', 'An error occurred while updating the user: ' . $e->getMessage());
         }
     }
@@ -108,6 +117,17 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $user = User::findOrFail($id);
+            $user->delete();
+            DB::commit();
+            Alert::toast('User deleted successfully.', 'success')->autoClose(1500);
+            return redirect()->route('users');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Alert::toast('An error occurred while deleting the user.', 'error')->autoClose(1500);
+            return redirect()->back()->with('error', 'An error occurred while deleting the user: ' . $e->getMessage());
+        }
     }
 }

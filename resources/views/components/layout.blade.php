@@ -255,7 +255,7 @@
                             </li>
 
                             <li>
-                                <a href="#"
+                                <a href="{{ route('logout') }}"
                                     class="link-dark d-inline-flex text-decoration-none rounded w-100">
                                     Logout
                                 </a>

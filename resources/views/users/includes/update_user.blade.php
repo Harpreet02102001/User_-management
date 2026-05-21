@@ -48,13 +48,13 @@
                             </div>
                             <div class="form-group p-2 mb-3">
                                 <label for="inputAddress2">Position/ Role</label>
-                                <select class="form-control" name="role" id="inputAddress2">
+                                <select class="form-control" name="role_id" id="inputAddress2">
                                     <option selected>Choose...</option>
                                     @foreach($roles as $role)
-                                    <option value="{{ $role->id}}" {{ $user->role == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                    <option value="{{ $role->id}}">{{ $role->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('role')
+                                @error('role_id')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>

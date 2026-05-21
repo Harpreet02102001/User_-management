@@ -57,6 +57,6 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-start">
-        {{ $users->onEachSide(5)->links() }}
+        {{ $users->onEachSide(10)->links() }}
     </div>
 </x-layout>

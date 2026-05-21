@@ -17,14 +17,12 @@ class LoginController extends Controller
         if (Auth::check()) {
             return redirect()->route('users');
         }
-        return view('auth.login');        //
+        return view('auth.login');
     }
 
 
     public function authenticate(Request $request)
     {
-        // Handle authentication logic here
-        // For example, you can validate the request and attempt to log in the user
         // dd($request->all());
         $request->validate([
             'email' => 'required|email',

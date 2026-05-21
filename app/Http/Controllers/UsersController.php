@@ -17,12 +17,12 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
+        $users = User::query();
+        $roles = Role::get();
 
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        $users = User::query();
-        $roles = Role::get();
 
         if ($request->has('keyword') && $request->input('keyword')) {
             $users = $users->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
@@ -101,6 +101,16 @@ class UsersController extends Controller
         try {
             DB::beginTransaction();
             $user = User::findOrFail($id);
+            // dd($request->all());
+            // $user::validate($request, [
+            //     'name' => 'required|string|max:255',
+            //     'email' => 'required|email|users,email,' . $user->id,
+            //     'mobile' => 'required|string|max:20',
+            //     'password' => 'nullable|string|min:6',
+            //     'department' => 'required|string|max:255',
+            //     'role_id' => 'required|exists:roles,id',
+            //     'is_active'  =>     'required|boolean',
+            // ]);
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,

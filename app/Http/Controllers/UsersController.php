@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Users\CreateUserRequest;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -16,6 +17,10 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
+
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
         $users = User::query();
         $roles = Role::get();
 
@@ -31,6 +36,9 @@ class UsersController extends Controller
      */
     public function create()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
         $roles = Role::get();
         // dd($roles->toArray());
         return view('users.includes.create_user', compact('roles'));

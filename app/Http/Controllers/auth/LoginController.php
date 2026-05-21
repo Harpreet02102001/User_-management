@@ -14,6 +14,9 @@ class LoginController extends Controller
      */
     public function index()
     {
+        if (Auth::check()) {
+            return redirect()->route('users');
+        }
         return view('auth.login');        //
     }
 
@@ -85,5 +88,13 @@ class LoginController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function logout(Request $request)
+    {
+        // dd('logout');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login');
     }
 }

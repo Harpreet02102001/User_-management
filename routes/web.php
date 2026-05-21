@@ -3,17 +3,14 @@
 use App\Http\Controllers\auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Model\Users;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-
-
-// Route::get('/users', function () {
-//     return view('users');
-// })->name('users');
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::group(['prefix' => 'users'], function () {
     Route::get('/', [UsersController::class, 'index'])->name('users');    //route for listing users
@@ -31,3 +28,5 @@ Route::group(['prefix' => 'login'], function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');    //route for login page
     Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('login.authenticate'); //route for handling login form submission
 });
+
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout'); //route for handling logout

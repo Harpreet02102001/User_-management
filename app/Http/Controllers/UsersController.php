@@ -23,11 +23,10 @@ class UsersController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-
         if ($request->has('keyword') && $request->input('keyword')) {
             $users = $users->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
         }
-        $users = $users->orderBy('name', 'asc')->simplePaginate(5);
+        $users = $users->orderBy('name', 'asc')->simplePaginate(10)->withQueryString();
         return view('users/users', compact('users', 'roles'));
     }
 
@@ -36,12 +35,15 @@ class UsersController extends Controller
      */
     public function create()
     {
+        // $user = Auth::user();
         if (!Auth::check()) {
             return redirect()->route('login');
         }
+
+        $this->authorize('create', User::class);
         $roles = Role::get();
-        // dd($roles->toArray());
-        return view('users.includes.create_user', compact('roles'));
+        return view('users.includes.create_user', compact('roles'));  Gate::authorize('update', $post);
+
     }
     /**
      * Store a newly created resource in storage.
@@ -87,10 +89,11 @@ class UsersController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
         $roles = Role::get();
+
         return view('users.includes.update_user', compact('user', 'roles'));
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -99,6 +102,7 @@ class UsersController extends Controller
     {
 
         try {
+
             DB::beginTransaction();
             $user = User::findOrFail($id);
             // dd($request->all());

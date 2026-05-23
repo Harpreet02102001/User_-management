@@ -10,6 +10,7 @@
                     @error('name')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
+
                 </div>
                 <div class="form-group col-md-6 p-2">
                     <label for="inputPassword4">Email</label>

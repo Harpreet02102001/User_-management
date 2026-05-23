@@ -3,7 +3,9 @@
 
     <div class="d-flex justify-content-between py-1 mb-2 border-bottom">
         <h4 class="text-primary">User Master</h4>
+        <!-- @can('create', App\Models\User::class) -->
         <a href="{{ route('users.create') }}" class="btn btn-primary">Add New User</a>
+        <!-- @endcan -->
     </div>
     <div class="d-flex justify-content-end mb-3">
         <form action="{{ route('users') }}" method="GET" class="w-25">
@@ -41,12 +43,17 @@
                 <td>{{ $user->created_at }}</td>
                 <td>{{ $user->is_active ? 'Active' : 'Inactive' }}</td>
                 <td>
+                    <!-- Coment this code / because already  -->
+                    @can('update', $user)
                     <a href="{{route('users.show', $user->id)}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    @endcan
+                    @can('delete', $user)
                     <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
                     </form>
+                    @endcan
                 </td>
             </tr>
             @empty

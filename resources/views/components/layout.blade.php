@@ -239,12 +239,15 @@
                     <div class="collapse" id="account-collapse">
 
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            @cannot('manage-users')
+                            <!-- <a href="/users">Manage Users</a> -->
                             <li>
                                 <a href="{{ route('users') }}"
                                     class="link-dark d-inline-flex text-decoration-none rounded w-100">
                                     User
                                 </a>
                             </li>
+                            @endcan
 
 
                             <li>

@@ -115,6 +115,7 @@ class UsersController extends Controller
             //     'role_id' => 'required|exists:roles,id',
             //     'is_active'  =>     'required|boolean',
             // ]);
+             $this->authorize('update', $user);
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,

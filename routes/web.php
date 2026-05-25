@@ -20,7 +20,7 @@ Route::group(['prefix' => 'users'], function () {
 
     //update and delete routes can be added here 
     Route::get('/{id}', [UsersController::class, 'edit'])->name('users.show'); //route for showing user details
-    Route::put('/{id}', [UsersController::class, 'update'])->name('users.update')->can('update', 'post'); //route for updating user details
+    Route::put('/{id}', [UsersController::class, 'update'])->name('users.update'); //route for updating user details
     Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy'); //route for deleting user
 });
 

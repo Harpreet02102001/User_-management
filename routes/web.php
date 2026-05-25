@@ -4,7 +4,8 @@ use App\Http\Controllers\auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WelcomeController;
-use App\Http\Model\Users;
+use App\Mail\MyTestEmail;
+use Illuminate\Support\Facades\Mail;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -30,3 +31,25 @@ Route::group(['prefix' => 'login'], function () {
 });
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout'); //route for handling logout
+
+
+
+// route for sending test email using Mail::send methodssss
+// Route::get('/mail', function () {
+//     Mail::send([], [], function ($message) {
+//         $message->to("usersup52555@gmail.com", "Test User")
+//             ->subject("Test Email")
+//             ->text("This is a test email from Laravel 12.");
+//     });
+//     return "Email sent successfully!";
+// });
+
+
+Route::get('/mail', function () {
+    return view('mail.name')->with('name', 'Harpreet Singh');
+})->name('mail');
+
+Route::get("/mail_blade", function () {
+    $name = "Harpreet Singh";
+    Mail::to("test@example.com")->send(new MyTestEmail($name));
+});

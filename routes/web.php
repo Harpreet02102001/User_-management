@@ -46,7 +46,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout'); //rou
 
 
 Route::get('/mail', function () {
-    return view('mail.name')->with('name', 'Harpreet Singh');
+    return view('emails.welcome_user')->with('name', 'Harpreet Singh');
 })->name('mail');
 
 Route::get("/mail_blade", function () {

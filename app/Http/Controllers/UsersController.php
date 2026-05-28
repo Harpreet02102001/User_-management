@@ -9,6 +9,9 @@ use App\Http\Requests\Users\CreateUserRequest;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MyTestEmail;
+use App\Notifications\WelcomeUser;
 
 class UsersController extends Controller
 {
@@ -42,8 +45,8 @@ class UsersController extends Controller
 
         $this->authorize('create', User::class);
         $roles = Role::get();
-        return view('users.includes.create_user', compact('roles'));  Gate::authorize('update', $post);
-
+        return view('users.includes.create_user', compact('roles'));
+        Gate::authorize('update', $post);
     }
     /**
      * Store a newly created resource in storage.
@@ -51,6 +54,7 @@ class UsersController extends Controller
     public function store(CreateUserRequest $request)
     {
         try {
+            // dd($request->all());
             DB::beginTransaction();
             User::create([
                 'name' => $request->name,
@@ -61,17 +65,33 @@ class UsersController extends Controller
                 'role_id' => $request->role_id,
                 'is_active' => $request->has('is_active'),
             ]);
-            DB::commit();
             // return redirect()->route('users')->with('success', 'User created successfully.');
+            User::latest()->first()->notify(new WelcomeUser());
             Alert::toast('User created successfully.', 'success')->autoClose(1500);
+            User::latest()->first()->notify(new WelcomeUser());
+            Alert::toast('User created successfully.', 'success')->autoClose(1500);
+            DB::commit();
             return redirect()->route('users');
         } catch (\Exception $e) {
             DB::rollBack();
             Alert::toast('An error occurred while creating the user.', 'error')->autoClose(1500);
             return redirect()->back()->with('error', 'An error occurred while creating the user: ' . $e->getMessage());
         }
-        // dd($request->all());
     }
+
+    // public  function to send email using mailables
+    public function sendEmail()
+    {
+        $data = [
+            'email' => "harpreet@rediff.com",
+            'password' => "password123",
+        ];
+
+        Mail::to("harpreet.singh@example.com")->send(new MyTestEmail($data['email'], $data['password']));
+
+        return "Email sent successfully!";
+    }
+
 
     /**
      * Display the specified resource.
@@ -115,7 +135,7 @@ class UsersController extends Controller
             //     'role_id' => 'required|exists:roles,id',
             //     'is_active'  =>     'required|boolean',
             // ]);
-             $this->authorize('update', $user);
+            $this->authorize('update', $user);
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,

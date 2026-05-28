@@ -39,9 +39,11 @@ class MyTestEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.name',
+            view: 'email.name',
             with: [
                 'name' => "Harpreet Singh",
+                'email' => $this->name,
+                // 'password' => $this->password,  --- IGNORE ---   
             ],
         );
     }
